@@ -1,0 +1,447 @@
+
+#include<dos.h>
+#include<fstream.h>
+#include<ctype.h>
+#include<iomanip.h>
+#include<conio.h>
+#include<stdio.h>
+#include<stdlib.h>
+#include<graphics.h>
+class account
+{
+ public :
+	int acno;
+	char name[50];
+	int deposit;
+	char type;
+public :
+	void create_account();
+	void show_account();
+	void modify();
+	void dep(int);
+	void draw(int);
+	void report();
+	int retacno();
+	int retdeposit();
+	char rettype();
+};
+
+void account::create_account()
+{       clrscr();
+	line(0,40,900,40);
+	line(0,327,900,327);
+	cout<<"\n\n\n\n\t\t\t\t\t\t";
+	outtextxy(60,57,"Enter The account No. : ");
+	cin>>acno;
+	cout<<"\n\n\t\t\t\t\t\t\t\t";
+	outtextxy(60,104,"Enter The Name of The account Holder : ");
+	gets(name);
+	cout<<"\n\n\t\t\t\t\t\t\t";
+	outtextxy(60,153,"Enter Type of The account (C/S) : ");
+	cin>>type;
+	type=toupper(type);
+	cout<<"\n\n\n\n\t\t\t\t\t\t\t";
+	outtextxy(60,207,"Enter The Initial amount ( >=500 for Saving");
+	outtextxy(60,234,"and >=1000 for current ) : ");
+	cin>>deposit;
+	outtextxy(60,297,"\n\n\nAccount Created !! ");
+
+	return;
+}
+
+void account::show_account()
+{       cleardevice();
+	setcolor(2);
+	gotoxy(60,107);
+	cout<<"\nAccount No. : "<<acno;
+	cout<<"\n\n\nAccount Holder Name : ";
+	cout<<name;
+	cout<<"\n\n\nType of Account : "<<type;
+	cout<<"\n\n\nBalance amount : "<<deposit;
+
+	return;
+}
+
+
+void account::modify()
+{
+	cleardevice();
+	setcolor(3);
+	gotoxy(60,107);
+	cout<<"\nThe account No. "<<acno;
+	cout<<"\n\n\nEnter The Name of The account Holder : ";
+	gets(name);
+	cout<<"\n\nEnter Type of The account (C/S) : ";
+	cin>>type;
+	type=toupper(type);
+	cout<<"\n\nEnter The amount : ";
+	cin>>deposit;
+
+	return;
+}
+
+void account::dep(int x)
+{
+	deposit+=x;
+}
+
+void account::draw(int x)
+{
+	deposit-=x;
+}
+
+void account::report()
+{       cleardevice();
+	cout<<acno<<"\t"<<name<<"\t"<<type<<deposit<<endl;
+}
+
+int account::retacno()
+{
+	return acno;
+}
+
+int account::retdeposit()
+{
+	return deposit;
+}
+
+char account::rettype()
+{
+	return type;
+}
+
+
+
+
+
+void write_account();	//function to write record in binary file
+void display_sp(int);	//function to display account details given by user
+void modify_account(int);	//function to modify record of file
+void delete_account(int);	//function to delete record of file
+void display_all();		//function to display all account details
+void deposit_withdraw(int, int); // function to desposit/withdraw amount for given account
+void intro();	//introductory screen function
+
+
+int main()
+{
+	char ch;
+	int num;
+	int gd = DETECT, gm;
+	initgraph(&gd, &gm, "C:\\TURBOC3\\BGI");
+	intro();
+	setbkcolor(2);
+
+	do
+	{       cleardevice();
+		clrscr();
+		setbkcolor(15);
+		setcolor(6);
+		rectangle(70,40,575,450);
+		rectangle(75,45,580,455);
+		rectangle(75,40,575,450);
+		rectangle(70,45,575,450);
+		settextstyle(10,0,2);
+		outtextxy(220,55,"MAIN MENU");
+		outtextxy(219,54,"MAIN MENU");
+		settextstyle(7,0,1);
+		outtextxy(190,125,"01. ADD NEW ACCOUNT");
+		settextstyle(7,0,2);
+		outtextxy(190,160,"02. DEPOSIT AMOUNT");
+		settextstyle(7,0,1);
+		outtextxy(190,195,"03. WITHDRAW AMOUNT");
+		settextstyle(7,0,1);
+		outtextxy(190,230,"04. BALANCE ENQUIRY");
+		settextstyle(7,0,1);
+		outtextxy(190,265,"05. LIST OF ALL ACCOUNT HOLDERS");
+		settextstyle(7,0,1);
+		outtextxy(190,300,"06. CLOSE AN ACCOUNT");
+		settextstyle(7,0,1);
+		outtextxy(190,335,"07. MODIFY AN ACCOUNT");
+		settextstyle(7,0,1);
+		outtextxy(190,370,"08. EXIT");
+		settextstyle(8,0,1);
+		cout<<"\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\t\t\t\t\t\t\t";
+		outtextxy(180,405,"\n\n\tPlease select your option : ");
+		cin>>ch;
+		switch(ch)
+		{
+		case '1':cleardevice();
+			 setcolor(8);
+			 write_account();
+			 break;
+		case '2':cleardevice();
+			 setcolor(10);
+			 settextstyle(1,0,3);
+			 cout<<"\n\t\t\t\t\t";
+			 outtextxy(10,7,"\n\n\tEnter The account No. : ");
+			 cin>>num;
+			 deposit_withdraw(num, 1);
+			 break;
+		case '3':cleardevice();
+			setcolor(11);
+			settextstyle(1,0,3);
+			cout<<"\n\t\t\t\t\t";
+			outtextxy(10,7,"Enter The account No. : ");
+			cin>>num;
+			deposit_withdraw(num, 2);
+			break;
+		case '4':cleardevice();
+			 setcolor(5);
+			 settextstyle(1,0,3);
+			 cout<<"\n\t\t\t\t\t";
+			 outtextxy(10,7,"\n\n\tEnter The account No. : ");
+			 cin>>num;
+			 display_sp(num);
+			 break;
+		case '5':cleardevice();
+			 settextstyle(1,0,3);
+			 gotoxy(10,10);
+			 display_all();
+			 break;
+		case '6':cleardevice();
+			 clrscr();
+			 setcolor(3);
+			 settextstyle(1,0,3);
+			 cout<<"\n\t\t\t\t\t";
+			 outtextxy(10,7,"Enter The account No. : ");
+			 cin>>num;
+			 delete_account(num);
+			 break;
+		 case '7':cleardevice();
+			 clrscr();
+			 settextstyle(1,0,3);
+			 cout<<"\n\t\t\t\t\t";
+			 outtextxy(10,7,"Enter The account No. : ");
+			 cin>>num;
+			 modify_account(num);
+			break;
+		 case '8':cleardevice();
+			 settextstyle(1,0,3);
+			 line(69,236,600,236);
+			 line(69,283,600,283);
+			 outtextxy(70,240,"Thanks for using bank management system !!");
+			 delay(5);
+			 exit;
+
+		 default :cout<<"\a";
+		}
+		getch();
+    }while(ch!='8');
+	cleardevice();
+	clearviewport();
+	return 0;
+}
+void write_account()
+{
+	account ac;
+	ofstream outFile;
+	outFile.open("account.dat",ios::binary|ios::app);
+	ac.create_account();
+	outFile.write((char *) &ac, sizeof(account));
+	outFile.close();
+}
+
+
+void display_sp(int n)
+{
+	account ac;
+	int flag=0;
+	ifstream inFile;
+    inFile.open("account.dat",ios::binary);
+	if(!inFile)
+	{
+		cout<<"File could not be open !! Press any Key...";
+		return;
+	}
+	cout<<"\nBALANCE DETAILS\n";
+    while(inFile.read((char *) &ac, sizeof(account)))
+	{
+		if(ac.retacno()==n)
+		{
+			ac.show_account();
+			flag=1;
+		}
+	}
+    inFile.close();
+	if(flag==0)
+		cout<<"\n\nAccount number does not exist";
+}
+
+
+
+void modify_account(int n)
+{
+	int found=0;
+	account ac;
+	fstream File;
+    File.open("account.dat",ios::binary|ios::in|ios::out);
+	if(!File)
+	{
+		cout<<"File could not be open !! Press any Key...";
+		return;
+	}
+    while(File.read((char *) &ac, sizeof(account)) && found==0)
+	{
+		if(ac.retacno()==n)
+		{
+			ac.show_account();
+			cout<<"\n\nEnter The New Details of account"<<endl;
+			ac.modify();
+			int pos=(-1)*sizeof(account);
+			File.seekp(pos,ios::cur);
+		    File.write((char *) &ac, sizeof(account));
+		    cout<<"\n\n\t Record Updated";
+		    found=1;
+		  }
+	}
+	File.close();
+	if(found==0)
+		cout<<"\n\n Record Not Found ";
+}
+
+
+
+void delete_account(int n)
+{
+	account ac;
+	ifstream inFile;
+	ofstream outFile;
+	inFile.open("account.dat",ios::binary);
+	if(!inFile)
+	{
+		cout<<"File could not be open !! Press any Key...";
+		return;
+	}
+	outFile.open("Temp.dat",ios::binary);
+	inFile.seekg(0,ios::beg);
+	while(inFile.read((char *) &ac, sizeof(account)))
+	{
+		if(ac.retacno()!=n)
+		{
+			outFile.write((char *) &ac, sizeof(account));
+		}
+	}
+	inFile.close();
+	outFile.close();
+	remove("account.dat");
+	rename("Temp.dat","account.dat");
+	cout<<"\n\n\tRecord Deleted ..";
+}
+
+
+
+
+
+
+
+void display_all()
+{
+	account ac;
+	ifstream inFile;
+	inFile.open("account.dat",ios::binary);
+	if(!inFile)
+	{
+		cout<<"File could not be open !! Press any Key...";
+		return;
+	}
+	cout<<"\n\n\t\tACCOUNT HOLDER LIST\n\n";
+	cout<<"====================================================\n";
+	cout<<"A/c no. \t NAME \t Type  Balance\n";
+	cout<<"====================================================\n";
+	while(inFile.read((char *) &ac, sizeof(account)))
+	{
+		ac.report();
+	}
+	inFile.close();
+}
+
+
+void deposit_withdraw(int n, int option)
+{
+	int amt;
+	int found=0;
+	account ac;
+	fstream File;
+    File.open("account.dat", ios::binary|ios::in|ios::out);
+	if(!File)
+	{
+		cout<<"File could not be open !! Press any Key...";
+		return;
+	}
+    while(File.read((char *) &ac, sizeof(account)) && found==0)
+	{
+		if(ac.retacno()==n)
+		{
+			ac.show_account();
+			if(option==1)
+			{
+				cout<<"\n\n\tTO DEPOSIT AMOUNT ";
+				cout<<"\n\nEnter The amount to be deposited";
+				cin>>amt;
+				ac.dep(amt);
+			}
+			if(option==2)
+			{
+				cout<<"\n\n\tTO WITHDRAW AMOUNT ";
+				cout<<"\n\nEnter The amount to be withdraw";
+				cin>>amt;
+				int bal=ac.retdeposit()-amt;
+				if((bal<500 && ac.rettype()=='S') || (bal<1000 && ac.rettype()=='C'))
+					cout<<"Insufficience balance";
+				else
+					ac.draw(amt);
+		      }
+			int pos=(-1)* sizeof(ac);
+			File.seekp(pos,ios::cur);
+			File.write((char *) &ac, sizeof(account));
+			cout<<"\n\n\t Record Updated";
+			found=1;
+	       }
+	 }
+    File.close();
+	if(found==0)
+		cout<<"\n\n Record Not Found ";
+}
+
+
+
+void intro()
+{  int i=0,j=0;
+	setbkcolor(11);
+	setcolor(9);
+
+	while(!kbhit())
+	 {rectangle(10,10,620,420);
+	  rectangle(50+i,275,150+i,400);
+	  rectangle(150+i,350,200+i,400);
+	  circle(75+i,410,10);
+	  circle(175+i,410,10);
+	  setcolor(5);
+	  settextstyle(1,0,4);
+	  outtextxy(150,4,"BANK MANAGMENT  SYSTEM");
+	  settextstyle(1,0,3);
+	  setcolor(8);
+	  outtextxy(10,100,"MADE BY : ");
+	  outtextxy(10,120,": CHINMAY JAIN ");
+	  outtextxy(10,140,": BHAVANSH  ");
+	  outtextxy(10,160,": ABHAY SONI");
+	  outtextxy(10,180,": ARYAN");
+	  outtextxy(10,200,": AKSHATA SHUKLA ");
+	  outtextxy(10,220,": NIDISH RAJ MORYA ");
+
+	  outtextxy(10,70,"COLLEGE : SVVV");
+	  outtextxy(65+i,310,"BANK");
+	  delay(500);
+
+	 if (i == 420)
+	  i=0;
+	  clearviewport();
+	 i+=15;
+	 j++;
+	}
+    cleardevice();
+    getch();
+    return;
+
+}
